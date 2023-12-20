@@ -2,6 +2,7 @@
 
 const winston = require("winston");
 const os = require("os");
+const paths = require("../absolutePaths");
 
 const logger = winston.createLogger({
   level: "info",
@@ -20,8 +21,7 @@ const logger = winston.createLogger({
   transports: [
     new winston.transports.Console(),
     new winston.transports.File({
-      filename:
-        "/Users/saitejsunkara/Desktop/Check Day/Server/logger/server.log",
+      filename: paths.logsPath,
     }),
   ],
 });
