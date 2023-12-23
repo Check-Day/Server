@@ -15,11 +15,13 @@ const port = process.env.APPLICATION_PORT;
 
 app.get("/check-server-status", (req, res) => {
   logger.info("GET: Check");
-  statsdClient.increment("api.calls.get.CHECK");
+  statsdClient.increment("api.calls.get.CHECK_MAIN_SERVER");
   res.json({
-    message: constants.successConnection,
+    message: constants.mainServer + " " + constants.successConnection,
   });
 });
+
+app.use("/auth", authRoutes);
 
 app.listen(port, (error) => {
   if (!error) {
