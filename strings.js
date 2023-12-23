@@ -7,6 +7,7 @@ let constants = {
   successConnection: "Connected Successfully",
   authServer: "Auth Server",
   mainServer: "Main Server",
+  methodNotAllowed: "Method not Allowed",
 };
 
 module.exports = constants;

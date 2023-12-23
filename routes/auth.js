@@ -12,9 +12,12 @@ dotenv.config();
 router.get("/check-server-status", (req, res) => {
   logger.info("GET: Check Auth Servers");
   statsdClient.increment("api.calls.get.CHECK_AUTH_SERVERS");
-  res.json({
-    message: constants.authServer + " " + constants.successConnection,
-  });
+  res
+    .status(200)
+    .json({
+      message: constants.authServer + " " + constants.successConnection,
+    })
+    .end();
 });
 
 module.exports = router;
