@@ -4,21 +4,44 @@ const express = require("express");
 const logger = require("./logger/logger");
 const statsdClient = require("./statsd/statsd");
 const constants = require("./strings");
+const authRoutes = require("./routes/auth");
+const userRoutes = require("./routes/users");
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 const app = express();
-const PORT = 3000;
 
-app.get("/", (req, res) => {
-  logger.info("GET: Check");
-  statsdClient.increment("api.calls.get.CHECK");
-  res.json({
-    message: constants.successConnection,
-  });
+const port = process.env.APPLICATION_PORT;
+
+app.get("/main/check-server-status", (req, res) => {
+  logger.info("GET: Check Main Server");
+  statsdClient.increment("api.calls.get.CHECK_MAIN_SERVER");
+  res
+    .status(200)
+    .json({
+      message: constants.mainServer + " " + constants.successConnection,
+    })
+    .end();
 });
 
-app.listen(PORT, (error) => {
+app.use("/auth", authRoutes);
+app.use("/user", userRoutes);
+
+app.all("*", (req, res) => {
+  logger.info("ALL: Unknown Method Called: " + req.url);
+  statsdClient.increment("api.calls.all.UNKNOWN_METHOD_CALLED_" + req.url);
+  res
+    .status(405)
+    .json({
+      message: constants.methodNotAllowed,
+    })
+    .end();
+});
+
+app.listen(port, (error) => {
   if (!error) {
-    console.log(constants.successServer + PORT);
+    console.log(constants.successServer + port);
   } else console.log(constants.serverError, error);
 });
 
