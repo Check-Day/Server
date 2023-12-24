@@ -5,6 +5,7 @@ const logger = require("./logger/logger");
 const statsdClient = require("./statsd/statsd");
 const constants = require("./strings");
 const authRoutes = require("./routes/auth");
+const userRoutes = require("./routes/users");
 const dotenv = require("dotenv");
 
 dotenv.config();
@@ -25,6 +26,7 @@ app.get("/main/check-server-status", (req, res) => {
 });
 
 app.use("/auth", authRoutes);
+app.use("/user", userRoutes);
 
 app.all("*", (req, res) => {
   logger.info("ALL: Unknown Method Called: " + req.url);
