@@ -13,7 +13,8 @@ dotenv.config();
 let isLoggedIn = (req, res, next) => {
   logger.info("METHOD: Is Logged In Check");
   statsdClient.increment("api.calls.method.CHECK_LOGIN_STATUS");
-  if (req.cookies.userProfile && req.cookies.userProfile.email_verified) {
+  let userData = JSON.parse(req.cookies.userProfile);
+  if (req.cookies.userProfile && userData.email_verified) {
     // req.session.userProfile
     logger.info("METHOD: Is Logged In Check Successful");
     statsdClient.increment("api.calls.method.LOGIN_STATUS_SUCCESSFUL");
@@ -35,7 +36,7 @@ router.get("/", (req, res) => {
     // req.session.userProfile = {
     //   userSet: loginUserData.userProfile.userSet._raw,
     // };
-    if (loginUserData.userProfile.userSet._raw) {
+    if (loginUserData.userProfile.userSet) {
       logger.info("GET: User / Data Set");
       statsdClient.increment("api.calls.method.USER_/_DATA_SET");
       res.cookie("userProfile", loginUserData.userProfile.userSet._raw, {
