@@ -18,6 +18,7 @@ let constants = {
   redirectionAfterLogout: "/auth/login",
   directToIndex: "/user/index",
   noLogArray: ["/favicon.ico"],
+  loginSuccessMessage: "Logged in Successfully",
 };
 
 module.exports = constants;
