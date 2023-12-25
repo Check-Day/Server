@@ -17,6 +17,7 @@ let constants = {
   logoutErrorMessage: "Error Logging Out. Please try again.",
   redirectionAfterLogout: "/auth/login",
   directToIndex: "/user/index",
+  noLogArray: ["/favicon.ico"],
 };
 
 module.exports = constants;

@@ -1,18 +1,28 @@
 /** @format */
 
 const express = require("express");
+const session = require("express-session");
+const dotenv = require("dotenv");
 const logger = require("./logger/logger");
 const statsdClient = require("./statsd/statsd");
 const constants = require("./strings");
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/users");
-const dotenv = require("dotenv");
 
 dotenv.config();
 
 const app = express();
 
 const port = process.env.APPLICATION_PORT;
+
+app.use(
+  session({
+    secret: process.env.SALT,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: process.env.IS_PRODUCTION == "true" ? true : false },
+  })
+);
 
 app.get("/main/check-server-status", (req, res) => {
   logger.info("GET: Check Main Server");

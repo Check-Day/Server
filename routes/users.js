@@ -9,20 +9,23 @@ const constants = require("../strings");
 dotenv.config();
 
 let isLoggedIn = (req, res, next) => {
-  if (loginUserData.userProfile.userSet) {
+  if (req.session.userProfile) {
     next();
   } else {
-    res
-      .status(401)
-      .json({
-        message: "Unauthorized user. Please login.",
-      })
-      .end();
+    res.redirect(constants.redirectionAfterLogout);
   }
 };
 
 router.get("/", (req, res) => {
-  res.redirect(constants.directToIndex);
+  if (!req.session.userProfile) {
+    req.session.userProfile = {
+      userSet: loginUserData.userProfile.userSet._raw,
+    };
+    res.redirect(constants.directToIndex);
+  } else {
+    req.session.destroy();
+    res.redirect(constants.redirectionAfterLogout);
+  }
 });
 
 router.get("/index", isLoggedIn, (req, res) => {
