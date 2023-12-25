@@ -13,7 +13,7 @@ dotenv.config();
 let isLoggedIn = (req, res, next) => {
   logger.info("METHOD: Is Logged In Check");
   statsdClient.increment("api.calls.method.CHECK_LOGIN_STATUS");
-  if (req.cookies.userProfile) {
+  if (req.cookies.userProfile && req.cookies.userProfile.email_verified) {
     // req.session.userProfile
     logger.info("METHOD: Is Logged In Check Successful");
     statsdClient.increment("api.calls.method.LOGIN_STATUS_SUCCESSFUL");
