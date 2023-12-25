@@ -71,6 +71,7 @@ router.get("/logout", (req, res, next) => {
   loginUserData.setSerializedUserProfile(null);
   loginUserData.setDeSerializedUserProfile(null);
   res.cookie("userProfile", "", { expires: new Date(0), httpOnly: true });
+  res.cookie("connect.sid", "", { expires: new Date(0), httpOnly: true });
   console.log(req.cookies.userProfile);
   req.logout((err) => {
     if (err) {

@@ -21,6 +21,8 @@ let isLoggedIn = (req, res, next) => {
   } else {
     logger.info("METHOD: Is Logged In Check Failed");
     statsdClient.increment("api.calls.method.LOGIN_STATUS_FAILED");
+    res.cookie("userProfile", "", { expires: new Date(0), httpOnly: true });
+    res.cookie("connect.sid", "", { expires: new Date(0), httpOnly: true });
     res.redirect(constants.redirectionAfterLogout);
   }
 };
@@ -47,6 +49,8 @@ router.get("/", (req, res) => {
         "api.calls.method.USER_/_DATA_NOT_SET_LOGIN_AGAIN_IN_USERSET"
       );
       req.session.destroy();
+      res.cookie("userProfile", "", { expires: new Date(0), httpOnly: true });
+      res.cookie("connect.sid", "", { expires: new Date(0), httpOnly: true });
       res.redirect(constants.redirectionAfterLogout);
     }
   } else {
