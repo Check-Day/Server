@@ -13,7 +13,8 @@ dotenv.config();
 let isLoggedIn = (req, res, next) => {
   logger.info("METHOD: Is Logged In Check");
   statsdClient.increment("api.calls.method.CHECK_LOGIN_STATUS");
-  if (req.session.userProfile) {
+  if (req.cookies.userProfile) {
+    // req.session.userProfile
     logger.info("METHOD: Is Logged In Check Successful");
     statsdClient.increment("api.calls.method.LOGIN_STATUS_SUCCESSFUL");
     next();
@@ -27,13 +28,27 @@ let isLoggedIn = (req, res, next) => {
 router.get("/", (req, res) => {
   logger.info("GET: User / Setup");
   statsdClient.increment("api.calls.method.USER_/_SETUP");
-  if (!req.session.userProfile) {
-    logger.info("GET: User / Data Set");
-    statsdClient.increment("api.calls.method.USER_/_DATA_SET");
-    req.session.userProfile = {
-      userSet: loginUserData.userProfile.userSet._raw,
-    };
-    res.redirect(constants.directToIndex);
+  if (!req.cookies.userProfile) {
+    // req.session.userProfile
+    // req.session.userProfile = {
+    //   userSet: loginUserData.userProfile.userSet._raw,
+    // };
+    if (loginUserData.userProfile.userSet._raw) {
+      logger.info("GET: User / Data Set");
+      statsdClient.increment("api.calls.method.USER_/_DATA_SET");
+      res.cookie("userProfile", loginUserData.userProfile.userSet._raw, {
+        maxAge: constants.cookieExpiryDate,
+        httpOnly: true,
+      });
+      res.redirect(constants.directToIndex);
+    } else {
+      logger.info("GET: User / Data not Set - Login Again");
+      statsdClient.increment(
+        "api.calls.method.USER_/_DATA_NOT_SET_LOGIN_AGAIN"
+      );
+      req.session.destroy();
+      res.redirect(constants.redirectionAfterLogout);
+    }
   } else {
     logger.info("GET: User / Data not Set - Login Again");
     statsdClient.increment("api.calls.method.USER_/_DATA_NOT_SET_LOGIN_AGAIN");
