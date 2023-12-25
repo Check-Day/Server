@@ -3,6 +3,7 @@
 const express = require("express");
 const session = require("express-session");
 const dotenv = require("dotenv");
+const cookieParser = require("cookie-parser");
 const logger = require("./logger/logger");
 const statsdClient = require("./statsd/statsd");
 const constants = require("./strings");
@@ -23,6 +24,8 @@ app.use(
     cookie: { secure: process.env.IS_PRODUCTION == "true" ? true : false },
   })
 );
+
+app.use(cookieParser());
 
 app.get("/main/check-server-status", (req, res) => {
   logger.info("GET: Check Main Server");

@@ -19,6 +19,7 @@ let constants = {
   directToIndex: "/user/index",
   noLogArray: ["/favicon.ico"],
   loginSuccessMessage: "Logged in Successfully",
+  cookieExpiryDate: 3 * 30 * 24 * 60 * 60 * 1000,
 };
 
 module.exports = constants;

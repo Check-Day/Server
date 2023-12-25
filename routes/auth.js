@@ -70,6 +70,8 @@ router.get("/logout", (req, res, next) => {
   loginUserData.setUserProfile(null);
   loginUserData.setSerializedUserProfile(null);
   loginUserData.setDeSerializedUserProfile(null);
+  res.cookie("userProfile", "", { expires: new Date(0), httpOnly: true });
+  console.log(req.cookies.userProfile);
   req.logout((err) => {
     if (err) {
       res
