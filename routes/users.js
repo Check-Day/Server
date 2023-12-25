@@ -42,18 +42,17 @@ router.get("/", (req, res) => {
       });
       res.redirect(constants.directToIndex);
     } else {
-      logger.info("GET: User / Data not Set - Login Again");
+      logger.info("GET: User / Data not Set - Login Again - in Userset");
       statsdClient.increment(
-        "api.calls.method.USER_/_DATA_NOT_SET_LOGIN_AGAIN"
+        "api.calls.method.USER_/_DATA_NOT_SET_LOGIN_AGAIN_IN_USERSET"
       );
       req.session.destroy();
       res.redirect(constants.redirectionAfterLogout);
     }
   } else {
-    logger.info("GET: User / Data not Set - Login Again");
-    statsdClient.increment("api.calls.method.USER_/_DATA_NOT_SET_LOGIN_AGAIN");
-    req.session.destroy();
-    res.redirect(constants.redirectionAfterLogout);
+    logger.info("GET: User / Data Set Previously");
+    statsdClient.increment("api.calls.method.USER_/_DATA_SET_PREVIOUSLY");
+    res.redirect(constants.directToIndex);
   }
 });
 

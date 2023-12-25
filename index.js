@@ -9,6 +9,7 @@ const statsdClient = require("./statsd/statsd");
 const constants = require("./strings");
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/users");
+const sequelize = require("./data/database/sequelize");
 
 dotenv.config();
 
@@ -26,6 +27,16 @@ app.use(
 );
 
 app.use(cookieParser());
+
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log(constants.database_connection_success);
+  })
+  .catch((error) => {
+    console.log(constants.database_connection_failure);
+    throw error;
+  });
 
 app.get("/main/check-server-status", (req, res) => {
   logger.info("GET: Check Main Server");

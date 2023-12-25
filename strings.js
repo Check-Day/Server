@@ -20,6 +20,13 @@ let constants = {
   noLogArray: ["/favicon.ico"],
   loginSuccessMessage: "Logged in Successfully",
   cookieExpiryDate: 3 * 30 * 24 * 60 * 60 * 1000,
+  database_name: "checkdayclient",
+  database_username: "root",
+  database_password: "rootroot",
+  database_host: "localhost",
+  database_dialect: "mysql",
+  database_connection_success: "Database is connected successfully",
+  database_connection_failure: "Database was unable to connect",
 };
 
 module.exports = constants;
