@@ -16,6 +16,7 @@ let constants = {
   logoutMessage: "Logged Out Successfully",
   logoutErrorMessage: "Error Logging Out. Please try again.",
   redirectionAfterLogout: "/auth/login",
+  directToIndex: "/user/index",
 };
 
 module.exports = constants;

@@ -4,6 +4,7 @@ const express = require("express");
 const router = express.Router();
 const dotenv = require("dotenv");
 const loginUserData = require("../data/loggedInUserData");
+const constants = require("../strings");
 
 dotenv.config();
 
@@ -20,7 +21,11 @@ let isLoggedIn = (req, res, next) => {
   }
 };
 
-router.get("/", isLoggedIn, (req, res) => {
+router.get("/", (req, res) => {
+  res.redirect(constants.directToIndex);
+});
+
+router.get("/index", isLoggedIn, (req, res) => {
   res
     .status(200)
     .json({
