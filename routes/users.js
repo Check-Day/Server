@@ -7,6 +7,7 @@ const loginUserData = require("../data/loggedInUserData");
 const constants = require("../strings");
 const logger = require("../logger/logger");
 const statsdClient = require("../statsd/statsd");
+const { encrypt, decrypt } = require("../middlewares/encryption");
 
 dotenv.config();
 
@@ -15,7 +16,7 @@ let isLoggedIn = (req, res, next) => {
   statsdClient.increment("api.calls.method.CHECK_LOGIN_STATUS");
 
   if (req.cookies.userProfile) {
-    let userData = JSON.parse(req.cookies.userProfile);
+    let userData = JSON.parse(decrypt(req.cookies.userProfile));
     if (userData.email_verified) {
       logger.info("METHOD: Is Logged In Check Successful");
       statsdClient.increment("api.calls.method.LOGIN_STATUS_SUCCESSFUL");
@@ -50,10 +51,14 @@ router.get("/", (req, res) => {
     if (loginUserData.userProfile.userSet) {
       logger.info("GET: User / Data Set");
       statsdClient.increment("api.calls.method.USER_/_DATA_SET");
-      res.cookie("userProfile", loginUserData.userProfile.userSet._raw, {
-        maxAge: constants.cookieExpiryDate,
-        httpOnly: true,
-      });
+      res.cookie(
+        "userProfile",
+        encrypt(loginUserData.userProfile.userSet._raw),
+        {
+          maxAge: constants.cookieExpiryDate,
+          httpOnly: true,
+        }
+      );
       res.redirect(constants.directToIndex);
     } else {
       logger.info("GET: User / Data not Set - Login Again - in Userset");
