@@ -7,6 +7,7 @@ const {
   setSerializedUserProfile,
   setDeSerializedUserProfile,
 } = require("../data/loggedInUserData");
+const { UserData, TaskData, ScratchPad } = require("../data/database/database");
 
 dotenv.config();
 

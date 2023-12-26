@@ -5,7 +5,7 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 
-const key = crypto.randomBytes(32);
+const key = Buffer.from(process.env.CRYPTO_KEY, "hex");
 const ivLength = 16;
 
 const encrypt = (text) => {

@@ -3,7 +3,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("./sequelize");
 
-// UserData Schema
 const UserData = sequelize.define("UserData", {
   serialNumber: {
     type: DataTypes.BIGINT,
@@ -19,7 +18,7 @@ const UserData = sequelize.define("UserData", {
   email: {
     type: DataTypes.STRING,
     allowNull: false,
-    primaryKey: true,
+    unique: true,
   },
   isPremium: {
     type: DataTypes.BOOLEAN,
@@ -44,7 +43,6 @@ const UserData = sequelize.define("UserData", {
   },
 });
 
-// TaskData Schema
 const TaskData = sequelize.define("TaskData", {
   serial: {
     type: DataTypes.BIGINT,
@@ -69,7 +67,7 @@ const TaskData = sequelize.define("TaskData", {
     },
   },
   task: {
-    type: DataTypes.TEXT("long"),
+    type: DataTypes.TEXT,
   },
   isCompleted: {
     type: DataTypes.BOOLEAN,
@@ -81,7 +79,6 @@ const TaskData = sequelize.define("TaskData", {
   },
 });
 
-// ScratchPad Schema
 const ScratchPad = sequelize.define("ScratchPad", {
   serial: {
     type: DataTypes.BIGINT,
@@ -108,12 +105,14 @@ const ScratchPad = sequelize.define("ScratchPad", {
     },
   },
   text: {
-    type: DataTypes.TEXT("long"),
+    type: DataTypes.TEXT,
   },
   dateTimeUpdated: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
   },
 });
+
+sequelize.sync();
 
 module.exports = { UserData, TaskData, ScratchPad };
