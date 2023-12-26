@@ -5,8 +5,8 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 
-const key = crypto.randomBytes(parseInt(process.env.AES_KEY_LENGTH));
-const ivLength = parseInt(process.env.AES_IV_LENGTH);
+const key = crypto.randomBytes(32);
+const ivLength = 16;
 
 const encrypt = (text) => {
   const iv = crypto.randomBytes(ivLength);
