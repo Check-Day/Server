@@ -10,10 +10,12 @@ const constants = require("./strings");
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/users");
 const sequelize = require("./data/database/sequelize");
+const database = require("./data/database/database");
 
 dotenv.config();
 
 const app = express();
+database.databaseSync();
 
 const port = process.env.APPLICATION_PORT;
 
