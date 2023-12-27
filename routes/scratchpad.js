@@ -74,34 +74,28 @@ router.put(
   }
 );
 
-router.put(
-  "/clear-scratch-pad",
-  isLoggedIn,
-  isRequestBody,
-  isRequestBodyForText,
-  async (req, res) => {
-    let userData = JSON.parse(decrypt(req.cookies.userProfile));
-    try {
-      let updatedScratchPadReturn = await updateScratchPad(
-        "",
-        userData.email,
-        new Date()
-      );
-      let message = "";
-      if (updatedScratchPadReturn.status == 201) {
-        message = constants.clearedScratchPad;
-      } else {
-        message = updatedScratchPadReturn.message;
-      }
-      res.status(updatedScratchPadReturn.status).json({
-        message: message,
-      });
-    } catch (error) {
-      res.status(503).json({
-        message: constants.errorUpdatingScratchPad,
-      });
+router.put("/clear-scratch-pad", isLoggedIn, async (req, res) => {
+  let userData = JSON.parse(decrypt(req.cookies.userProfile));
+  try {
+    let updatedScratchPadReturn = await updateScratchPad(
+      "",
+      userData.email,
+      new Date()
+    );
+    let message = "";
+    if (updatedScratchPadReturn.status == 201) {
+      message = constants.clearedScratchPad;
+    } else {
+      message = updatedScratchPadReturn.message;
     }
+    res.status(updatedScratchPadReturn.status).json({
+      message: message,
+    });
+  } catch (error) {
+    res.status(503).json({
+      message: constants.errorUpdatingScratchPad,
+    });
   }
-);
+});
 
 module.exports = router;
