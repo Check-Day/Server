@@ -79,9 +79,9 @@ const updateScratchPad = async (updatedText, userEmail, dateTime) => {
         text: updatedText,
         dateTimeUpdated: dateTime,
       });
-      logger.info("SCRATCHPAD UPDATED SUCCESSFULLY");
+      logger.info("UPDATED SCRATCHPAD FOR USER");
       statsdClient.increment(
-        "api.calls.scratchPadUpdate.ScratchPadUpdatedSuccessfully"
+        "api.calls.scratchPadUpdate.UpdatedScratchPadForUser"
       );
       return {
         updateStatus: true,

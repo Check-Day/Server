@@ -33,6 +33,7 @@ let constants = {
   invalidRequestBodyText: "Invalid Text in Request Body",
   unableToFindUser: "Unable to find User to update ScratchPad",
   successScratchPadUpdate: "ScratchPad updated Successfully",
+  clearedScratchPad: "ScratchPad cleared Successfully",
   errorUpdatingScratchPad: "Error Updating ScratchPad",
 };
 
