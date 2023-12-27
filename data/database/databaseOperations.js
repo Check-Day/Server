@@ -13,9 +13,13 @@ const insertUserDataAndScratchPadData = async (userProfile) => {
     const findUserByEmail = await UserData.findOne({
       where: { email: userProfile.email },
     });
-    logger.info("USER ALREADY EXISTS");
-    statsdClient.increment("api.calls.dataInsertion.userExists");
-    return true;
+    if (findUserByEmail == null) {
+      throw error;
+    } else {
+      logger.info("USER ALREADY EXISTS");
+      statsdClient.increment("api.calls.dataInsertion.userExists");
+      return true;
+    }
   } catch (error) {
     try {
       const newUser = await UserData.create({
