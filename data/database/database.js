@@ -81,7 +81,7 @@ const TaskData = sequelize.define("TaskData", {
   },
 });
 
-const ScratchPad = sequelize.define("ScratchPad", {
+const ScratchPadData = sequelize.define("ScratchPadData", {
   serial: {
     type: DataTypes.BIGINT,
     autoIncrement: true,
@@ -108,6 +108,7 @@ const ScratchPad = sequelize.define("ScratchPad", {
   },
   text: {
     type: DataTypes.TEXT,
+    defaultValue: "",
   },
   dateTimeUpdated: {
     type: DataTypes.DATE,
@@ -121,4 +122,4 @@ const databaseSync = async () => {
   await sequelize.sync();
 };
 
-module.exports = { UserData, TaskData, ScratchPad, databaseSync };
+module.exports = { UserData, TaskData, ScratchPadData, databaseSync };

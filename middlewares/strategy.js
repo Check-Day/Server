@@ -8,7 +8,9 @@ const {
   setDeSerializedUserProfile,
 } = require("../data/loggedInUserData");
 const { UserData, TaskData, ScratchPad } = require("../data/database/database");
-const { insertUserData } = require("../data/database/databaseOperations");
+const {
+  insertUserDataAndScratchPadData,
+} = require("../data/database/databaseOperations");
 
 dotenv.config();
 
@@ -24,7 +26,7 @@ passport.use(
     },
     function (request, accessToken, refreshToken, profile, done) {
       // if adding user to database, add here
-      insertUserData(JSON.parse(profile._raw));
+      insertUserDataAndScratchPadData(JSON.parse(profile._raw));
       setUserProfile(profile);
       done(null, profile);
     }

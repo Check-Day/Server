@@ -4,9 +4,9 @@ const stringify = require("json-stringify-safe");
 const logger = require("../../logger/logger");
 const { encrypt, decrypt } = require("../../middlewares/encryption");
 const statsdClient = require("../../statsd/statsd");
-const { UserData } = require("./database");
+const { UserData, ScratchPadData } = require("./database");
 
-const insertUserData = async (userProfile) => {
+const insertUserDataAndScratchPadData = async (userProfile) => {
   logger.info("TRYING TO INSERTING USER INTO DATABASE");
   statsdClient.increment("api.calls.dataInsertion.DataInsertionCalledToTry");
   try {
@@ -25,6 +25,18 @@ const insertUserData = async (userProfile) => {
         name: userProfile.name,
         profilePicture: userProfile.picture,
       });
+      try {
+        const newScratchPad = await ScratchPadData.create({
+          sub: userProfile.sub,
+          email: userProfile.email,
+        });
+      } catch (error) {
+        logger.info("UNABLE TO CREATE SCRATCHPAD");
+        statsdClient.increment(
+          "api.calls.dataInsertion.UnableToCreateScratchPad"
+        );
+        return false;
+      }
       logger.info("DATA INSERTED");
       statsdClient.increment("api.calls.dataInsertion.DataInserted");
       return true;
@@ -36,4 +48,4 @@ const insertUserData = async (userProfile) => {
   }
 };
 
-module.exports = { insertUserData };
+module.exports = { insertUserDataAndScratchPadData };
