@@ -115,10 +115,9 @@ const ScratchPad = sequelize.define("ScratchPad", {
   },
 });
 
-logger.info("DATABASE SYNC CALLED");
-statsdClient.increment("api.calls.databaseSync.databaseSyncCalled");
-
 const databaseSync = async () => {
+  logger.info("DATABASE SYNC CALLED");
+  statsdClient.increment("api.calls.databaseSync.databaseSyncCalled");
   await sequelize.sync();
 };
 
