@@ -4,11 +4,13 @@ const express = require("express");
 const session = require("express-session");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser");
 const logger = require("./logger/logger");
 const statsdClient = require("./statsd/statsd");
 const constants = require("./strings");
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/users");
+const scratchPadRoutes = require("./routes/scratchpad");
 const sequelize = require("./data/database/sequelize");
 const database = require("./data/database/database");
 
@@ -29,6 +31,8 @@ app.use(
 );
 
 app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 sequelize
   .authenticate()
@@ -53,6 +57,7 @@ app.get("/main/check-server-status", (req, res) => {
 
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
+app.use("/scratch-pad", scratchPadRoutes);
 
 app.all("*", (req, res) => {
   logger.info("ALL: Unknown Method Called: " + req.url);
