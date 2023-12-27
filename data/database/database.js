@@ -2,6 +2,8 @@
 
 const { DataTypes } = require("sequelize");
 const sequelize = require("./sequelize");
+const logger = require("../../logger/logger");
+const statsdClient = require("../../statsd/statsd");
 
 const UserData = sequelize.define("UserData", {
   serialNumber: {
@@ -112,6 +114,9 @@ const ScratchPad = sequelize.define("ScratchPad", {
     defaultValue: DataTypes.NOW,
   },
 });
+
+logger.info("DATABASE SYNC CALLED");
+statsdClient.increment("api.calls.databaseSync.databaseSyncCalled");
 
 sequelize.sync();
 
