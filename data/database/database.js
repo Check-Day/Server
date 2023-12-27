@@ -13,7 +13,7 @@ const UserData = sequelize.define("UserData", {
     primaryKey: true,
   },
   sub: {
-    type: DataTypes.BIGINT,
+    type: DataTypes.STRING,
     allowNull: false,
     unique: true,
   },
@@ -53,7 +53,7 @@ const TaskData = sequelize.define("TaskData", {
     primaryKey: true,
   },
   sub: {
-    type: DataTypes.BIGINT,
+    type: DataTypes.STRING,
     allowNull: false,
     references: {
       model: UserData,
@@ -89,7 +89,7 @@ const ScratchPad = sequelize.define("ScratchPad", {
     primaryKey: true,
   },
   sub: {
-    type: DataTypes.BIGINT,
+    type: DataTypes.STRING,
     allowNull: false,
     unique: true,
     references: {
@@ -118,6 +118,8 @@ const ScratchPad = sequelize.define("ScratchPad", {
 logger.info("DATABASE SYNC CALLED");
 statsdClient.increment("api.calls.databaseSync.databaseSyncCalled");
 
-sequelize.sync();
+const databaseSync = async () => {
+  await sequelize.sync();
+};
 
-module.exports = { UserData, TaskData, ScratchPad };
+module.exports = { UserData, TaskData, ScratchPad, databaseSync };
