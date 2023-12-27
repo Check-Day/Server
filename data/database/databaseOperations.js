@@ -53,6 +53,34 @@ const insertUserDataAndScratchPadData = async (userProfile) => {
   }
 };
 
+const getDataFromScratchPad = async (userEmail, url) => {
+  try {
+    let scratchPadText = await ScratchPadData.findOne({
+      where: {
+        email: userEmail,
+      },
+    });
+    let textFromScratchPad = scratchPadText.dataValues.text;
+    logger.info("GET: Retrieved Scratchpad Data: " + url);
+    statsdClient.increment("api.calls.all.RETRIEVED_SCRATCHPAD_" + url);
+    return {
+      isRetrieved: true,
+      status: 200,
+      message: textFromScratchPad,
+    };
+  } catch (error) {
+    logger.info("GET: Scratchpad Unable to Retrieve: " + url);
+    statsdClient.increment(
+      "api.calls.all.UNABLE_TO_RETRIEVE_SCRATCHPAD_" + url
+    );
+    return {
+      isRetrieved: false,
+      status: 503,
+      message: constants.unableToRetrieveDataFromScratchPad,
+    };
+  }
+};
+
 const updateScratchPad = async (updatedText, userEmail, dateTime) => {
   logger.info("UPDATING SCRATCHPAD");
   statsdClient.increment("api.calls.scratchPadUpdate.UpdatingScratchPad");
@@ -102,4 +130,8 @@ const updateScratchPad = async (updatedText, userEmail, dateTime) => {
   }
 };
 
-module.exports = { insertUserDataAndScratchPadData, updateScratchPad };
+module.exports = {
+  insertUserDataAndScratchPadData,
+  getDataFromScratchPad,
+  updateScratchPad,
+};
