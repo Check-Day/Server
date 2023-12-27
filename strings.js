@@ -27,6 +27,7 @@ let constants = {
   database_dialect: "mysql",
   database_connection_success: "Database is connected successfully",
   database_connection_failure: "Database was unable to connect",
+  failedScratchPadLoad: "Scratchpad Service Unavailable currently",
 };
 
 module.exports = constants;
