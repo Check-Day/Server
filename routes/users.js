@@ -8,9 +8,11 @@ const constants = require("../strings");
 const logger = require("../logger/logger");
 const statsdClient = require("../statsd/statsd");
 const { encrypt, decrypt } = require("../middlewares/encryption");
-const { isLoggedIn } = require("../middlewares/checkLogin");
+const { isLoggedIn } = require("../middlewares/checks");
 
 dotenv.config();
+
+router.use(express.urlencoded({ extended: true }));
 
 router.get("/", (req, res) => {
   logger.info("GET: User / Setup");

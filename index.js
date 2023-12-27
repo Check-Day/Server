@@ -4,6 +4,7 @@ const express = require("express");
 const session = require("express-session");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser");
 const logger = require("./logger/logger");
 const statsdClient = require("./statsd/statsd");
 const constants = require("./strings");
@@ -30,6 +31,8 @@ app.use(
 );
 
 app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 sequelize
   .authenticate()

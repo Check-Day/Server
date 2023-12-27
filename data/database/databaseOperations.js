@@ -5,6 +5,7 @@ const logger = require("../../logger/logger");
 const { encrypt, decrypt } = require("../../middlewares/encryption");
 const statsdClient = require("../../statsd/statsd");
 const { UserData, ScratchPadData } = require("./database");
+const constants = require("../../strings");
 
 const insertUserDataAndScratchPadData = async (userProfile) => {
   logger.info("TRYING TO INSERTING USER INTO DATABASE");
@@ -52,4 +53,53 @@ const insertUserDataAndScratchPadData = async (userProfile) => {
   }
 };
 
-module.exports = { insertUserDataAndScratchPadData };
+const updateScratchPad = async (updatedText, userEmail, dateTime) => {
+  logger.info("UPDATING SCRATCHPAD");
+  statsdClient.increment("api.calls.scratchPadUpdate.UpdatingScratchPad");
+  try {
+    logger.info("UPDATING SCRATCHPAD");
+    statsdClient.increment("api.calls.scratchPadUpdate.UpdatingScratchPad");
+    const scratchPad = await ScratchPadData.findOne({
+      where: {
+        email: userEmail,
+      },
+    });
+    if (!scratchPad) {
+      logger.info("UNABLE TO FIND THE USER TO UPDATE SCRATCHPAD");
+      statsdClient.increment(
+        "api.calls.scratchPadUpdate.UnableToFindUserToUpdateScratchPad"
+      );
+      return {
+        updateStatus: false,
+        message: constants.unableToFindUser,
+        status: 401,
+      };
+    } else {
+      const updatedScratchPad = await scratchPad.update({
+        text: updatedText,
+        dateTimeUpdated: dateTime,
+      });
+      logger.info("SCRATCHPAD UPDATED SUCCESSFULLY");
+      statsdClient.increment(
+        "api.calls.scratchPadUpdate.ScratchPadUpdatedSuccessfully"
+      );
+      return {
+        updateStatus: true,
+        message: constants.successScratchPadUpdate,
+        status: 201,
+      };
+    }
+  } catch (error) {
+    logger.info("Error Updating ScratchPad");
+    statsdClient.increment(
+      "api.calls.scratchPadUpdate.Error Updating ScratchPad"
+    );
+    return {
+      updateStatus: false,
+      message: constants.errorUpdatingScratchPad,
+      status: 503,
+    };
+  }
+};
+
+module.exports = { insertUserDataAndScratchPadData, updateScratchPad };

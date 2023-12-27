@@ -34,4 +34,43 @@ let isLoggedIn = (req, res, next) => {
   }
 };
 
-module.exports = { isLoggedIn };
+let isRequestBody = (req, res, next) => {
+  logger.info("METHOD: Request Body Check Initiated");
+  statsdClient.increment("api.calls.method.REQUEST_BODY_CHECK_INITIATED");
+  if (req.body) {
+    next();
+  } else {
+    res
+      .status(400)
+      .json({
+        message: constants.emptyRequestBody,
+      })
+      .end();
+  }
+};
+
+let isRequestBodyForText = (req, res, next) => {
+  logger.info("METHOD: Request Body Check Initiated");
+  statsdClient.increment("api.calls.method.REQUEST_BODY_CHECK_INITIATED");
+  if (req.body.text || req.body.text == "") {
+    if (req.body.text == undefined || req.body.text == null) {
+      res
+        .status(400)
+        .json({
+          message: constants.invalidRequestBodyText,
+        })
+        .end();
+    } else {
+      next();
+    }
+  } else {
+    res
+      .status(400)
+      .json({
+        message: constants.emptyRequestBodyText,
+      })
+      .end();
+  }
+};
+
+module.exports = { isLoggedIn, isRequestBody, isRequestBodyForText };
