@@ -27,12 +27,13 @@ let constants = {
   database_dialect: "mysql",
   database_connection_success: "Database is connected successfully",
   database_connection_failure: "Database was unable to connect",
-  failedScratchPadLoad: "Scratchpad Service Unavailable currently",
+  unableToRetrieveDataFromScratchPad: "Unable to retrieve data from ScratchPad",
   emptyRequestBody: "Empty Request Body",
   emptyRequestBodyText: "Empty Text in Request Body",
   invalidRequestBodyText: "Invalid Text in Request Body",
   unableToFindUser: "Unable to find User to update ScratchPad",
   successScratchPadUpdate: "ScratchPad updated Successfully",
+  clearedScratchPad: "ScratchPad cleared Successfully",
   errorUpdatingScratchPad: "Error Updating ScratchPad",
 };
 
