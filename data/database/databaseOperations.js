@@ -1,8 +1,6 @@
 /** @format */
 
-const stringify = require("json-stringify-safe");
 const logger = require("../../logger/logger");
-const { encrypt, decrypt } = require("../../middlewares/encryption");
 const statsdClient = require("../../statsd/statsd");
 const { UserData, ScratchPadData, TaskData } = require("./database");
 const constants = require("../../strings");

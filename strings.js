@@ -16,7 +16,7 @@ let constants = {
   logoutMessage: "Logged Out Successfully",
   logoutErrorMessage: "Error Logging Out. Please try again.",
   redirectionAfterLogout: "/auth/login",
-  directToIndex: "/user/index",
+  directToIndex: "/main/index",
   noLogArray: ["/favicon.ico"],
   loginSuccessMessage: "Logged in Successfully",
   cookieExpiryDate: 3 * 30 * 24 * 60 * 60 * 1000,

@@ -48,6 +48,7 @@ router.get("/", (req, res) => {
 });
 
 router.get("/index", isLoggedIn, (req, res) => {
+  // For User Profile
   logger.info("GET: Login Successful, get into index");
   statsdClient.increment("api.calls.method.LOGIN_SUCCESSFUL_GET_INTO_INDEX");
   res

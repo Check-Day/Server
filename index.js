@@ -11,6 +11,7 @@ const constants = require("./strings");
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/users");
 const taskRoutes = require("./routes/task");
+const mainRoutes = require("./routes/main");
 const scratchPadRoutes = require("./routes/scratchpad");
 const sequelize = require("./data/database/sequelize");
 const database = require("./data/database/database");
@@ -60,6 +61,7 @@ app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
 app.use("/scratch-pad", scratchPadRoutes);
 app.use("/task", taskRoutes);
+app.use("/main", mainRoutes);
 
 app.all("*", (req, res) => {
   logger.info("ALL: Unknown Method Called: " + req.url);

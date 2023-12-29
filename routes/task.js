@@ -18,6 +18,7 @@ const {
   updateTaskForUser,
   deleteTaskForUser,
   getTasksForUser,
+  getDataFromScratchPad,
 } = require("../data/database/databaseOperations");
 
 dotenv.config();
