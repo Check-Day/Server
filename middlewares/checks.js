@@ -96,9 +96,34 @@ let isRequestBodyForTextWithEmptyText = (req, res, next) => {
   }
 };
 
+let isRequestBodyForSerial = (req, res, next) => {
+  logger.info("METHOD: Request Body Check Initiated");
+  statsdClient.increment("api.calls.method.REQUEST_BODY_CHECK_INITIATED");
+  if (req.body.serial && req.body.serial != "") {
+    if (req.body.serial == undefined || req.body.serial == null) {
+      res
+        .status(400)
+        .json({
+          message: constants.invalidRequestBodyText,
+        })
+        .end();
+    } else {
+      next();
+    }
+  } else {
+    res
+      .status(400)
+      .json({
+        message: constants.emptyRequestBodyText,
+      })
+      .end();
+  }
+};
+
 module.exports = {
   isLoggedIn,
   isRequestBody,
   isRequestBodyForText,
   isRequestBodyForTextWithEmptyText,
+  isRequestBodyForSerial,
 };

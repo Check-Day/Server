@@ -36,8 +36,11 @@ let constants = {
   clearedScratchPad: "ScratchPad cleared Successfully",
   errorUpdatingScratchPad: "Error Updating ScratchPad",
   errorAddingTask: "Error Updating Task",
-  errorAddingTask: "Error Updating Task",
   errorAddingTaskForUser: "Error Adding Task For User",
+  errorDeletingTaskForUser: "Error Deleting Task For User",
+  deletingTaskForUser: " Task has been Deleted",
+  errorDeletingTask: "Error Deleting Task",
+  noTaskFound: "No Task Found",
 };
 
 module.exports = constants;

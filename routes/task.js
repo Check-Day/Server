@@ -7,14 +7,16 @@ const {
   isLoggedIn,
   isRequestBody,
   isRequestBodyForTextWithEmptyText,
+  isRequestBodyForSerial,
 } = require("../middlewares/checks");
-const { encrypt, decrypt } = require("../middlewares/encryption");
+const { decrypt } = require("../middlewares/encryption");
 const logger = require("../logger/logger");
 const statsdClient = require("../statsd/statsd");
 const constants = require("../strings");
 const {
   addTaskForUser,
   updateTaskForUser,
+  deleteTaskForUser,
 } = require("../data/database/databaseOperations");
 
 dotenv.config();
@@ -59,7 +61,6 @@ router.put(
   async (req, res) => {
     logger.info("POST: Update Task For User");
     statsdClient.increment("api.calls.post.UPDATE_TASK_FOR_USERS");
-    let userProfile = JSON.parse(decrypt(req.cookies.userProfile));
     try {
       let updateTask = await updateTaskForUser(
         parseInt(req.body.serial),
@@ -86,27 +87,23 @@ router.delete(
   "/delete-task",
   isLoggedIn,
   isRequestBody,
-  isRequestBodyForTextWithEmptyText,
+  isRequestBodyForSerial,
   async (req, res) => {
-    logger.info("POST: Update Task For User");
-    statsdClient.increment("api.calls.post.UPDATE_TASK_FOR_USERS");
-    let userProfile = JSON.parse(decrypt(req.cookies.userProfile));
+    logger.info("POST: Delete Task For User");
+    statsdClient.increment("api.calls.post.DELETE_TASK_FOR_USERS");
     try {
-      let updateTask = await updateTaskForUser(
-        parseInt(req.body.serial),
-        req.body.text
-      );
+      let deleteTask = await deleteTaskForUser(parseInt(req.body.serial));
       res
-        .status(updateTask.status)
+        .status(deleteTask.status)
         .json({
-          message: updateTask.message,
+          message: deleteTask.message,
         })
         .end();
     } catch (error) {
       res
         .status(503)
         .json({
-          message: constants.errorAddingTaskForUser,
+          message: constants.errorDeletingTaskForUser,
         })
         .end();
     }

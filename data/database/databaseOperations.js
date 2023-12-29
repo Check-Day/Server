@@ -195,7 +195,11 @@ const updateTaskForUser = async (serial, newTask) => {
       statsdClient.increment(
         "api.calls.taskOperation.UNABLE_TO_FIND_TASK_TO_UPDATE"
       );
-      throw error;
+      return {
+        updateStatus: false,
+        message: constants.noTaskFound,
+        status: 204,
+      };
     }
   } catch (error) {
     logger.info("Error Updating Task");
@@ -208,10 +212,55 @@ const updateTaskForUser = async (serial, newTask) => {
   }
 };
 
+const deleteTaskForUser = async (serial) => {
+  logger.info("DELETING TASK FOR USER");
+  statsdClient.increment("api.calls.taskOperation.DeletingTaskForUser");
+  try {
+    logger.info("DELETING TASK");
+    statsdClient.increment("api.calls.taskOperation.DeletingTask");
+    const task = await TaskData.findOne({
+      where: {
+        serial: serial,
+      },
+    });
+    if (task) {
+      logger.info("TASK FOUND");
+      statsdClient.increment("api.calls.taskOperation.TASK_FOUND");
+      await task.destroy();
+      logger.info("TASK DELETED");
+      statsdClient.increment("api.calls.taskOperation.TASK_DELETED");
+      return {
+        deleteStatus: true,
+        message: serial + constants.deletingTaskForUser,
+        status: 204,
+      };
+    } else {
+      logger.info("Unable to find Task to Update");
+      statsdClient.increment(
+        "api.calls.taskOperation.UNABLE_TO_FIND_TASK_TO_UPDATE"
+      );
+      return {
+        deleteStatus: false,
+        message: constants.noTaskFound,
+        status: 204,
+      };
+    }
+  } catch (error) {
+    logger.info("Error Deleting Task");
+    statsdClient.increment("api.calls.taskOperation.ErrorDeletingTask");
+    return {
+      deleteStatus: false,
+      message: constants.errorAddingTask,
+      status: 503,
+    };
+  }
+};
+
 module.exports = {
   insertUserDataAndScratchPadData,
   getDataFromScratchPad,
   updateScratchPad,
   addTaskForUser,
   updateTaskForUser,
+  deleteTaskForUser,
 };
