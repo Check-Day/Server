@@ -256,6 +256,56 @@ const deleteTaskForUser = async (serial) => {
   }
 };
 
+const getTasksForUser = async (email, sub) => {
+  logger.info("GET ALL TASKS FOR USER");
+  statsdClient.increment("api.calls.taskOperation.GET_ALL_TASKS_FOR_USER");
+  try {
+    logger.info("GETTING TASKS");
+    statsdClient.increment("api.calls.taskOperation.GetAllTasksForUser");
+    const tasks = await TaskData.findAll({
+      where: {
+        email: email,
+        sub: sub,
+      },
+    });
+    tasksArray = [];
+    tasks.map((eachTaskData) => {
+      delete eachTaskData.dataValues.sub;
+      delete eachTaskData.dataValues.email;
+      delete eachTaskData.dataValues.createdAt;
+      eachTaskData.dataValues.sub;
+      tasksArray.push(eachTaskData.dataValues);
+    });
+    if (tasksArray.length) {
+      logger.info("TASKS FOUND");
+      statsdClient.increment("api.calls.taskOperation.TASKS_FOUND");
+      return {
+        getStatus: true,
+        message: tasksArray,
+        status: 200,
+      };
+    } else {
+      logger.info("Unable to find Task to Get");
+      statsdClient.increment(
+        "api.calls.taskOperation.UNABLE_TO_FIND_TASK_TO_GET"
+      );
+      return {
+        getStatus: true,
+        message: constants.noTaskFound,
+        status: 201,
+      };
+    }
+  } catch (error) {
+    logger.info("Error Getting Task");
+    statsdClient.increment("api.calls.taskOperation.ErrorGettingTasks");
+    return {
+      getStatus: false,
+      message: constants.errorAddingTask,
+      status: 503,
+    };
+  }
+};
+
 module.exports = {
   insertUserDataAndScratchPadData,
   getDataFromScratchPad,
@@ -263,4 +313,5 @@ module.exports = {
   addTaskForUser,
   updateTaskForUser,
   deleteTaskForUser,
+  getTasksForUser,
 };

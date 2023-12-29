@@ -17,6 +17,7 @@ const {
   addTaskForUser,
   updateTaskForUser,
   deleteTaskForUser,
+  getTasksForUser,
 } = require("../data/database/databaseOperations");
 
 dotenv.config();
@@ -59,8 +60,8 @@ router.put(
   isRequestBody,
   isRequestBodyForTextWithEmptyText,
   async (req, res) => {
-    logger.info("POST: Update Task For User");
-    statsdClient.increment("api.calls.post.UPDATE_TASK_FOR_USERS");
+    logger.info("PUT: Update Task For User");
+    statsdClient.increment("api.calls.put.UPDATE_TASK_FOR_USERS");
     try {
       let updateTask = await updateTaskForUser(
         parseInt(req.body.serial),
@@ -89,8 +90,8 @@ router.delete(
   isRequestBody,
   isRequestBodyForSerial,
   async (req, res) => {
-    logger.info("POST: Delete Task For User");
-    statsdClient.increment("api.calls.post.DELETE_TASK_FOR_USERS");
+    logger.info("DELETE: Delete Task For User");
+    statsdClient.increment("api.calls.delete.DELETE_TASK_FOR_USERS");
     try {
       let deleteTask = await deleteTaskForUser(parseInt(req.body.serial));
       res
@@ -109,5 +110,27 @@ router.delete(
     }
   }
 );
+
+router.get("/get-all-tasks", isLoggedIn, async (req, res) => {
+  logger.info("GET: Get Tasks For User");
+  statsdClient.increment("api.calls.get.GET_TASKS_FOR_USERS");
+  let userProfile = JSON.parse(decrypt(req.cookies.userProfile));
+  try {
+    let getTasks = await getTasksForUser(userProfile.email, userProfile.sub);
+    res
+      .status(getTasks.status)
+      .json({
+        message: getTasks.message,
+      })
+      .end();
+  } catch (error) {
+    res
+      .status(503)
+      .json({
+        message: constants.errorGettingTasksForUser,
+      })
+      .end();
+  }
+});
 
 module.exports = router;
