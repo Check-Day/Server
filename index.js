@@ -10,6 +10,7 @@ const statsdClient = require("./statsd/statsd");
 const constants = require("./strings");
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/users");
+const taskRoutes = require("./routes/task");
 const scratchPadRoutes = require("./routes/scratchpad");
 const sequelize = require("./data/database/sequelize");
 const database = require("./data/database/database");
@@ -58,6 +59,7 @@ app.get("/main/check-server-status", (req, res) => {
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
 app.use("/scratch-pad", scratchPadRoutes);
+app.use("/task", taskRoutes);
 
 app.all("*", (req, res) => {
   logger.info("ALL: Unknown Method Called: " + req.url);

@@ -18,10 +18,6 @@ router.get("/", (req, res) => {
   logger.info("GET: User / Setup");
   statsdClient.increment("api.calls.method.USER_/_SETUP");
   if (!req.cookies.userProfile) {
-    // req.session.userProfile
-    // req.session.userProfile = {
-    //   userSet: loginUserData.userProfile.userSet._raw,
-    // };
     if (loginUserData.userProfile.userSet) {
       logger.info("GET: User / Data Set");
       statsdClient.increment("api.calls.method.USER_/_DATA_SET");

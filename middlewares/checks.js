@@ -24,7 +24,6 @@ let isLoggedIn = (req, res, next) => {
       res.cookie("connect.sid", "", { expires: new Date(0), httpOnly: true });
       res.redirect(constants.redirectionAfterLogout);
     }
-    // req.session.userProfile
   } else {
     logger.info("METHOD: Is Logged In Check Failed");
     statsdClient.increment("api.calls.method.LOGIN_STATUS_FAILED");
@@ -73,4 +72,33 @@ let isRequestBodyForText = (req, res, next) => {
   }
 };
 
-module.exports = { isLoggedIn, isRequestBody, isRequestBodyForText };
+let isRequestBodyForTextWithEmptyText = (req, res, next) => {
+  logger.info("METHOD: Request Body Check Initiated");
+  statsdClient.increment("api.calls.method.REQUEST_BODY_CHECK_INITIATED");
+  if (req.body.text || req.body.text == "") {
+    if (req.body.text == undefined || req.body.text == null) {
+      res
+        .status(400)
+        .json({
+          message: constants.invalidRequestBodyText,
+        })
+        .end();
+    } else {
+      next();
+    }
+  } else {
+    res
+      .status(400)
+      .json({
+        message: constants.emptyRequestBodyText,
+      })
+      .end();
+  }
+};
+
+module.exports = {
+  isLoggedIn,
+  isRequestBody,
+  isRequestBodyForText,
+  isRequestBodyForTextWithEmptyText,
+};

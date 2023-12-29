@@ -35,6 +35,9 @@ let constants = {
   successScratchPadUpdate: "ScratchPad updated Successfully",
   clearedScratchPad: "ScratchPad cleared Successfully",
   errorUpdatingScratchPad: "Error Updating ScratchPad",
+  errorAddingTask: "Error Updating Task",
+  errorAddingTask: "Error Updating Task",
+  errorAddingTaskForUser: "Error Adding Task For User",
 };
 
 module.exports = constants;

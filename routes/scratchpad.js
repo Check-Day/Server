@@ -50,9 +50,12 @@ router.put(
         message: updatedScratchPadReturn.message,
       });
     } catch (error) {
-      res.status(503).json({
-        message: constants.errorUpdatingScratchPad,
-      });
+      res
+        .status(503)
+        .json({
+          message: constants.errorUpdatingScratchPad,
+        })
+        .end();
     }
   }
 );
