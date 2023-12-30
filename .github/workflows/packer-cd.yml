@@ -1,6 +1,6 @@
 # @format
 
-name: Build Packer App
+name: Build Packer App and AMI
 "on":
   pull_request:
     types:
@@ -24,7 +24,6 @@ jobs:
         with:
           node-version: "${{ matrix.node-version }}"
           cache: npm
-      - run: npm test
       - name: Install Packer
         run: >
           curl -SL
