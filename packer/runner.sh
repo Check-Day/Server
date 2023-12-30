@@ -11,6 +11,7 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs
 sudo apt update
 cd ~/server/
 sudo npm install
+cd ..
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server
 sudo mysql <<SQL
 CREATE DATABASE $DATABASE_NAME;
