@@ -42,13 +42,18 @@ variable "DATABASE_DIALECT" {
   default = env("DATABASE_DIALECT")
 }
 
+variable "SOURCE_AMI" {
+  type    = string
+  default = env("SOURCE_AMI")
+}
+
 source "amazon-ebs" "ubuntu" {
   access_key    = "${var.ACCESS_KEY}"
   secret_key    = "${var.SECRET_KEY}"
   ami_name      = "checkday_ami_${formatdate("MM_DD_HH_MM", timestamp())}"
   instance_type = "t2.micro"
   region        = "us-east-1"
-  source_ami    = "ami-0c7217cdde317cfec"
+  source_ami    = "${var.SOURCE_AMI}"
   ssh_username  = "ubuntu"
 }
 
