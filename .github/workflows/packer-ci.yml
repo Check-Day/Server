@@ -1,5 +1,7 @@
+# @format
+
 name: Validate Packer Configuration
-'on':
+"on":
   pull_request:
     branches:
       - main

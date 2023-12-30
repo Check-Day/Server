@@ -1,6 +1,6 @@
 # @format
 
-name: Continuous Integration
+name: Continuous Integration - Starting Node and Npm
 "on":
   pull_request:
     branches:
@@ -8,11 +8,6 @@ name: Continuous Integration
 jobs:
   tests:
     runs-on: ubuntu-latest
-    env:
-      DATABASE: "${{ secrets.DATABASE_NAME }}"
-      USER: "${{ secrets.DATABASE_USERNAME }}"
-      PASS: "${{ secrets.DATABASE_PASSWORD }}"
-      HOST: "${{ secrets.DATABASE_HOST }}"
     strategy:
       matrix:
         node-version:

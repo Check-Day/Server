@@ -37,11 +37,6 @@ variable "DATABASE_NAME" {
   default = env("DATABASE_NAME")
 }
 
-variable "DATABASE_DIALECT" {
-  type    = string
-  default = env("DATABASE_DIALECT")
-}
-
 variable "SOURCE_AMI" {
   type    = string
   default = env("SOURCE_AMI")
@@ -55,6 +50,7 @@ source "amazon-ebs" "ubuntu" {
   region        = "us-east-1"
   source_ami    = "${var.SOURCE_AMI}"
   ssh_username  = "ubuntu"
+  }
 }
 
 build {
@@ -71,7 +67,6 @@ build {
       "DATABASE_PASSWORD=${var.DATABASE_PASSWORD}",
       "DATABASE_HOST=${var.DATABASE_HOST}",
       "DATABASE_NAME=${var.DATABASE_NAME}",
-      "DATABASE_DIALECT=${var.DATABASE_DIALECT}",
     ]
   }
 }
