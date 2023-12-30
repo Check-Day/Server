@@ -22,7 +22,7 @@ jobs:
           sudo mv /tmp/packer /usr/bin/packer
 
           packer --version
-      - name: Create webapp.zip
+      - name: Create server.zip
         run: |
           zip -r server.zip .
       - name: Initialize Packer Configuration and Format packer file
