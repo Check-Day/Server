@@ -9,6 +9,7 @@ sudo apt-get install -y curl
 curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs
 sudo apt update
+sudo npm install
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server
 sudo mysql <<SQL
 CREATE DATABASE $DATABASE_NAME;
