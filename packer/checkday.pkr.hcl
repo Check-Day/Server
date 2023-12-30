@@ -37,11 +37,6 @@ variable "DATABASE_NAME" {
   default = env("DATABASE_NAME")
 }
 
-variable "SOURCE_AMI" {
-  type    = string
-  default = env("SOURCE_AMI")
-}
-
 source "amazon-ebs" "ubuntu" {
   access_key    = "${var.ACCESS_KEY}"
   secret_key    = "${var.SECRET_KEY}"
