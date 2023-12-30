@@ -39,7 +39,7 @@ variable "DATABASE_NAME" {
 
 variable "SOURCE_AMI" {
   type    = string
-  default = env("SOURCE_AMI")
+  default = "ami-06aa3f7caf3a30282"
 }
 
 source "amazon-ebs" "ubuntu" {
