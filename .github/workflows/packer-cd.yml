@@ -22,6 +22,19 @@ jobs:
       DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
       DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
       DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+      DATABASE_DIALECT: ${{ secrets.DATABASE_DIALECT }}
+      APPLICATION_PORT: ${{ secrets.APPLICATION_PORT }}
+      GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+      GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+      SALT: ${{ secrets.SALT }}
+      AES_KEY: ${{ secrets.AES_KEY }}
+      INITIALIZATION_VECTOR: ${{ secrets.INITIALIZATION_VECTOR }}
+      USER_COOKIE_AGE: ${{ secrets.USER_COOKIE_AGE }}
+      IS_PRODUCTION: ${{ secrets.IS_PRODUCTION }}
+      CRYPTO_ALGORITHM: ${{ secrets.CRYPTO_ALGORITHM }}
+      CRYPTO_KEY: ${{ secrets.CRYPTO_KEY }}
+      CRYPTO_IV_LENGTH: ${{ secrets.CRYPTO_IV_LENGTH }}
+      SOURCE_AMI: ${{ secrets.SOURCE_AMI }}
     steps:
       - name: Checkout Git Repository
         uses: actions/checkout@v2
