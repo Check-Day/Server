@@ -9,6 +9,7 @@ sudo apt-get install -y curl
 curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs
 sudo apt update
+cd ~/server/
 sudo npm install
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server
 sudo mysql <<SQL
@@ -26,11 +27,11 @@ Wants=network-online.target
 After=network-online.target cloud-final.service
 
 [Service]
-EnvironmentFile=/home/ubuntu/.env
+EnvironmentFile=/home/ubuntu/server/.env
 Type=simple
 User=ubuntu
-WorkingDirectory=/home/ubuntu/
-ExecStart=/usr/bin/node /home/ubuntu/index.js
+WorkingDirectory=/home/ubuntu/server
+ExecStart=/usr/bin/node /home/ubuntu/server/index.js
 Restart=on-failure
 
 [Install]
