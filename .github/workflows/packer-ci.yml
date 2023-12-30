@@ -1,0 +1,35 @@
+# @format
+
+name: Validate Packer Configuration
+"on":
+  pull_request:
+    branches:
+      - main
+jobs:
+  validate-packer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install Packer
+        run: >
+          curl -SL
+          https://releases.hashicorp.com/packer/1.4.2/packer_1.4.2_linux_amd64.zip
+          -o packer_1.4.2_linux_amd64.zip
+
+          unzip -o packer_1.4.2_linux_amd64.zip -d /tmp
+
+          sudo mv /tmp/packer /usr/bin/packer
+
+          packer --version
+      - name: Create webapp.zip
+        run: |
+          zip -r server.zip .
+      - name: Initialize Packer Configuration and Format packer file
+        run: |
+          packer init packer/checkday.pkr.hcl
+          packer fmt packer/checkday.pkr.hcl
+          packer fmt -check packer/checkday.pkr.hcl
+      - name: Validate Packer Configuration
+        run: |
+          packer validate packer/checkday.pkr.hcl

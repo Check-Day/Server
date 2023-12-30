@@ -1,15 +1,17 @@
 /** @format */
 
 const Sequelize = require("sequelize");
-const constants = require("../../strings");
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 const sequelize = new Sequelize(
-  constants.database_name,
-  constants.database_username,
-  constants.database_password,
+  process.env.DATABASE_NAME,
+  process.env.DATABASE_USERNAME,
+  process.env.DATABASE_PASSWORD,
   {
-    host: constants.database_host,
-    dialect: constants.database_dialect,
+    host: process.env.DATABASE_HOST,
+    dialect: process.env.DATABASE_DIALECT,
   }
 );
 
