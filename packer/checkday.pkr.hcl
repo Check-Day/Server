@@ -48,7 +48,7 @@ source "amazon-ebs" "ubuntu" {
   ami_name      = "checkday_ami_${formatdate("MM_DD_HH_MM", timestamp())}"
   instance_type = "t2.micro"
   region        = "us-east-1"
-  source_ami = "${SOURCE_AMI}"
+  source_ami = "${var.SOURCE_AMI}"
   source_ami_filter {
     filters = {
       name                = "ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"
