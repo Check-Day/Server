@@ -34,5 +34,5 @@ Restart=on-failure
 WantedBy=cloud-init.target
 EOF
 sudo systemctl daemon-reload
-sudo systemctl enable checkday.service
-sudo systemctl start checkday.service
+# sudo systemctl enable checkday.service
+# sudo systemctl start checkday.service
