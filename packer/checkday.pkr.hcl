@@ -50,7 +50,6 @@ source "amazon-ebs" "ubuntu" {
   region        = "us-east-1"
   source_ami    = "${var.SOURCE_AMI}"
   ssh_username  = "ubuntu"
-  }
 }
 
 build {
