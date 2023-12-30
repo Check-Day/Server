@@ -37,14 +37,14 @@ jobs:
           packer --version
       - name: Create server.zip
         run: |
-          zip -r webapp.zip .
+          zip -r server.zip .
       - name: Initialize Packer Configuration and Format packer file
         run: |
-          packer init packer/amazon-machine-image.pkr.hcl
-          packer fmt packer/amazon-machine-image.pkr.hcl
+          packer init packer/checkday.pkr.hcl
+          packer fmt packer/checkday.pkr.hcl
       - name: Validate Packer Configuration
         run: |
-          packer validate packer/amazon-machine-image.pkr.hcl
+          packer validate packer/checkday.pkr.hcl
       - name: Build Amazon Machine Image
         run: |
           packer build packer/checkday.pkr.hcl
