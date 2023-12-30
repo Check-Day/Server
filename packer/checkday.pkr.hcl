@@ -39,7 +39,7 @@ variable "DATABASE_NAME" {
 
 variable "SOURCE_AMI" {
   type    = string
-  default = env("SOURCE_AMI")
+  default = "ami-06aa3f7caf3a30282"
 }
 
 source "amazon-ebs" "ubuntu" {
@@ -49,16 +49,16 @@ source "amazon-ebs" "ubuntu" {
   instance_type = "t2.micro"
   region        = "us-east-1"
   source_ami = "${var.SOURCE_AMI}"
-  source_ami_filter {
-    filters = {
-      name                = "ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"
-      root-device-type    = "ebs"
-      virtualization-type = "hvm"
-    }
-    owners = ["467465390813"]
-    most_recent = true
+  aws_polling {
+    delay_seconds = 180
+    max_attempts  = 25
   }
-
+  launch_block_device_mappings {
+    device_name           = "/dev/xvda"
+    volume_size           = 25
+    volume_type           = "gp2"
+    delete_on_termination = "false"
+  }
   ssh_username  = "ubuntu"
 }
 
