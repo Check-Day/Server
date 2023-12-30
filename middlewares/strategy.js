@@ -25,7 +25,7 @@ passport.use(
       passReqToCallback: true,
     },
     function (request, accessToken, refreshToken, profile, done) {
-      // if adding user to database, add here
+      // if adding user to database, add here. Check
       insertUserDataAndScratchPadData(JSON.parse(profile._raw));
       setUserProfile(profile);
       done(null, profile);
