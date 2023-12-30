@@ -5,7 +5,7 @@ sudo apt-get install unzip
 unzip server.zip
 sudo apt update
 sudo DEBIAN_FRONTEND=noninteractive apt-get -y upgrade
-sudo apt install -y curl
+sudo apt-get install -y curl
 curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs
 sudo apt update
