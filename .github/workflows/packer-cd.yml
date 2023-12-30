@@ -40,4 +40,4 @@ jobs:
           zip -r webapp.zip .
       - name: Build Amazon Machine Image
         run: |
-          packer build packer/amazon-machine-image.pkr.hcl
+          packer build packer/checkday.pkr.hcl
