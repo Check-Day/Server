@@ -10,10 +10,10 @@ curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs
 sudo apt update
 sudo DEBIAN_FRONTEND=noninteractive apt install -y mysql-server
-sudo mysql
+sudo mysql -e "
 CREATE DATABASE ${DATABASE_NAME};
-ALTER USER `${DATABASE_USERNAME}`@`${DATABASE_HOST}` IDENTIFIED WITH mysql_native_password BY `${DATABASE_PASSWORD}`;
-exit;
+ALTER USER '${DATABASE_USERNAME}'@'${DATABASE_HOST}' IDENTIFIED WITH mysql_native_password BY '${DATABASE_PASSWORD}';
+"
 sudo systemctl start mysql.service
 
 sudo cat <<EOF | sudo tee /etc/systemd/system/server.service
