@@ -37,12 +37,18 @@ variable "DATABASE_NAME" {
   default = env("DATABASE_NAME")
 }
 
+variable "SOURCE_AMI" {
+  type    = string
+  default = env("SOURCE_AMI")
+}
+
 source "amazon-ebs" "ubuntu" {
   access_key    = "${var.ACCESS_KEY}"
   secret_key    = "${var.SECRET_KEY}"
   ami_name      = "checkday_ami_${formatdate("MM_DD_HH_MM", timestamp())}"
   instance_type = "t2.micro"
   region        = "us-east-1"
+  source_ami = "${SOURCE_AMI}"
   source_ami_filter {
     filters = {
       name                = "ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"
