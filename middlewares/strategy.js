@@ -11,16 +11,33 @@ const { UserData, TaskData, ScratchPad } = require("../data/database/database");
 const {
   insertUserDataAndScratchPadData,
 } = require("../data/database/databaseOperations");
+const { getParameter } = require("../parameter-store/variableManager");
 
 dotenv.config();
 
 var GoogleStrategy = require("passport-google-oauth2").Strategy;
 
+let googleClientIdValue, googleClientSecretValue;
+
+async () => {
+  logger.info("METHOD: Accessing Parameter Store in Encryption");
+  statsdClient.increment(
+    "api.calls.method.ACCESSING_PARAMETER_STORE_IN_Encryption"
+  );
+  try {
+    googleClientIdValue = await getParameter("GOOGLE_CLIENT_ID");
+    googleClientSecretValue = await getParameter("GOOGLE_CLIENT_SECRET");
+  } catch (error) {
+    logger.info("METHOD: Error Retrieving Parameter from Parameter Store");
+    statsdClient.increment("api.calls.method.ERROR_FROM_PARAMETER_STORE");
+  }
+};
+
 passport.use(
   new GoogleStrategy(
     {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      clientID: googleClientIdValue,
+      clientSecret: googleClientSecretValue,
       callbackURL: constants.callbackURL,
       passReqToCallback: true,
     },

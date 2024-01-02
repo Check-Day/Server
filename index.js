@@ -15,20 +15,38 @@ const mainRoutes = require("./routes/main");
 const scratchPadRoutes = require("./routes/scratchpad");
 const sequelize = require("./data/database/sequelize");
 const database = require("./data/database/database");
+const { getParameter } = require("./parameter-store/variableManager");
 
 dotenv.config();
 
 const app = express();
 database.databaseSync();
 
-const port = process.env.APPLICATION_PORT;
+let portValue, saltValue, isProductionValue;
+
+async () => {
+  logger.info("METHOD: Accessing Parameter Store in Index");
+  statsdClient.increment("api.calls.method.ACCESSING_PARAMETER_STORE_IN_INDEX");
+  try {
+    portValue = await getParameter("APPLICATION_PORT");
+    saltValue = await getParameter("SALT");
+    isProductionValue = await getParameter("IS_PRODUCTION");
+  } catch (error) {
+    logger.info("METHOD: Error Retrieving Parameter from Parameter Store");
+    statsdClient.increment("api.calls.method.ERROR_FROM_PARAMETER_STORE");
+  }
+};
+
+const port = portValue;
 
 app.use(
   session({
-    secret: process.env.SALT,
+    secret: saltValue,
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: process.env.IS_PRODUCTION == "true" ? true : false },
+    cookie: {
+      secure: isProductionValue == "true" ? true : false,
+    },
   })
 );
 

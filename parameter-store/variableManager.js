@@ -6,7 +6,7 @@ const logger = require("../logger/logger");
 const statsdClient = require("../statsd/statsd");
 const constants = require("../strings");
 
-async function getParameter(parameterName) {
+let getParameter = async (parameterName) => {
   logger.info("METHOD: Into Parameter Store for Search for " + parameterName);
   statsdClient.increment(
     "api.calls.method.CHECK_PARAMETER_STORE_FOR_" + parameterName
@@ -42,6 +42,6 @@ async function getParameter(parameterName) {
     console.error("Error getting parameter: ", error);
     throw error;
   }
-}
+};
 
 module.exports = { getParameter };
