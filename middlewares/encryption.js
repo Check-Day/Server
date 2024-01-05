@@ -1,12 +1,9 @@
 /** @format */
 
 const crypto = require("crypto");
-const dotenv = require("dotenv");
 const logger = require("../logger/logger");
 const statsdClient = require("../statsd/statsd");
 const { getParameter } = require("../parameter-store/parameters");
-
-dotenv.config();
 
 const getBufferAndIVLength = async () => {
   let cryptoKey = await getParameter("CRYPTO_KEY");
