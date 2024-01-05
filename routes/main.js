@@ -18,7 +18,8 @@ dotenv.config();
 router.get("/index", isLoggedIn, async (req, res) => {
   logger.info("GET: Get Tasks For User");
   statsdClient.increment("api.calls.get.GET_TASKS_FOR_USERS");
-  let userProfile = JSON.parse(decrypt(req.cookies.userProfile));
+  let decryptedUserProfile = await decrypt(req.cookies.userProfile);
+  let userProfile = JSON.parse(decryptedUserProfile);
   try {
     let getTasks = await getTasksForUser(userProfile.email, userProfile.sub);
     let getScratchPad = await getDataFromScratchPad(userProfile.email, req.url);

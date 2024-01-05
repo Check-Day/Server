@@ -14,21 +14,20 @@ dotenv.config();
 
 router.use(express.urlencoded({ extended: true }));
 
-router.get("/", (req, res) => {
+router.get("/", async (req, res) => {
   logger.info("GET: User / Setup");
   statsdClient.increment("api.calls.method.USER_/_SETUP");
   if (!req.cookies.userProfile) {
     if (loginUserData.userProfile.userSet) {
       logger.info("GET: User / Data Set");
       statsdClient.increment("api.calls.method.USER_/_DATA_SET");
-      res.cookie(
-        "userProfile",
-        encrypt(loginUserData.userProfile.userSet._raw),
-        {
-          maxAge: constants.cookieExpiryDate,
-          httpOnly: true,
-        }
+      let encryptedUserProfile = await encrypt(
+        loginUserData.userProfile.userSet._raw
       );
+      res.cookie("userProfile", encryptedUserProfile, {
+        maxAge: constants.cookieExpiryDate,
+        httpOnly: true,
+      });
       res.redirect(constants.directToIndex);
     } else {
       logger.info("GET: User / Data not Set - Login Again - in Userset");

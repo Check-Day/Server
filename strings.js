@@ -38,6 +38,7 @@ let constants = {
   deletingTaskForUser: " Task has been Deleted",
   errorDeletingTask: "Error Deleting Task",
   noTaskFound: "No Task Found",
+  region: "us-east-1",
 };
 
 module.exports = constants;

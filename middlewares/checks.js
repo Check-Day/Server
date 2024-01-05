@@ -5,12 +5,13 @@ const statsdClient = require("../statsd/statsd");
 const constants = require("../strings");
 const { decrypt } = require("./encryption");
 
-let isLoggedIn = (req, res, next) => {
+let isLoggedIn = async (req, res, next) => {
   logger.info("METHOD: Is Logged In Check");
   statsdClient.increment("api.calls.method.CHECK_LOGIN_STATUS");
 
   if (req.cookies.userProfile) {
-    let userData = JSON.parse(decrypt(req.cookies.userProfile));
+    let decryptedUserProfile = await decrypt(req.cookies.userProfile);
+    let userData = JSON.parse(decryptedUserProfile);
     if (userData.email_verified) {
       logger.info("METHOD: Is Logged In Check Successful");
       statsdClient.increment("api.calls.method.LOGIN_STATUS_SUCCESSFUL");

@@ -37,6 +37,11 @@ variable "DATABASE_NAME" {
   default = env("DATABASE_NAME")
 }
 
+variable "AWS_REGION" {
+  type    = string
+  default = env("AWS_REGION")
+}
+
 variable "SOURCE_AMI" {
   type    = string
   default = "ami-06aa3f7caf3a30282"
@@ -76,6 +81,9 @@ build {
       "DATABASE_PASSWORD=${var.DATABASE_PASSWORD}",
       "DATABASE_HOST=${var.DATABASE_HOST}",
       "DATABASE_NAME=${var.DATABASE_NAME}",
+      "ACCESS_KEY=${var.ACCESS_KEY}",
+      "SECRET_KEY=${var.SECRET_KEY}",
+      "AWS_REGION=${var.AWS_REGION}",
     ]
   }
 }

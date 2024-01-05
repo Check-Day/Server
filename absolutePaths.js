@@ -1,7 +1,7 @@
 /** @format */
 
 let paths = {
-  logsPath: "/home/ubuntu/logger/server.log",
+  logsPath: "/Users/saitejsunkara/Desktop/Check\ Day/Server/logger/server.log",
 };
 
 module.exports = paths;

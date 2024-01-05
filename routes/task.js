@@ -31,7 +31,8 @@ router.post(
   async (req, res) => {
     logger.info("POST: Add Task For User");
     statsdClient.increment("api.calls.post.ADD_TASK_FOR_USERS");
-    let userProfile = JSON.parse(decrypt(req.cookies.userProfile));
+    let decryptedUserProfile = await decrypt(req.cookies.userProfile)
+    let userProfile = JSON.parse(decryptedUserProfile);
     try {
       let addTask = await addTaskForUser(
         userProfile.sub,
@@ -115,7 +116,8 @@ router.delete(
 router.get("/get-all-tasks", isLoggedIn, async (req, res) => {
   logger.info("GET: Get Tasks For User");
   statsdClient.increment("api.calls.get.GET_TASKS_FOR_USERS");
-  let userProfile = JSON.parse(decrypt(req.cookies.userProfile));
+  let decryptedUserProfile = await decrypt(req.cookies.userProfile)
+  let userProfile = JSON.parse(decryptedUserProfile);
   try {
     let getTasks = await getTasksForUser(userProfile.email, userProfile.sub);
     res

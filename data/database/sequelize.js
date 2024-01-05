@@ -2,17 +2,23 @@
 
 const Sequelize = require("sequelize");
 const dotenv = require("dotenv");
+const { getParameter } = require("../../parameter-store/parameters");
 
 dotenv.config();
 
-const sequelize = new Sequelize(
-  process.env.DATABASE_NAME,
-  process.env.DATABASE_USERNAME,
-  process.env.DATABASE_PASSWORD,
-  {
-    host: process.env.DATABASE_HOST,
-    dialect: process.env.DATABASE_DIALECT,
-  }
-);
+let sequelize;
 
-module.exports = sequelize;
+const initDatabase = async () => {
+  const dbName = await getParameter("DATABASE_NAME");
+  const dbUsername = await getParameter("DATABASE_USERNAME");
+  const dbPassword = await getParameter("DATABASE_PASSWORD");
+  const dbHost = await getParameter("DATABASE_HOST");
+  const dbDialect = await getParameter("DATABASE_DIALECT");
+  sequelize = new Sequelize(dbName, dbUsername, dbPassword, {
+    host: dbHost,
+    dialect: dbDialect,
+  });
+  return sequelize;
+};
+
+module.exports = { initDatabase, sequelize };
