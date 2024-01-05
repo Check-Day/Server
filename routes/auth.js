@@ -2,15 +2,12 @@
 
 const express = require("express");
 const router = express.Router();
-const dotenv = require("dotenv");
 const passport = require("passport");
 const constants = require("../strings");
 const logger = require("../logger/logger");
 const statsdClient = require("../statsd/statsd");
 const strategy = require("../middlewares/strategy");
 const loginUserData = require("../data/loggedInUserData");
-
-dotenv.config();
 
 router.use(passport.initialize());
 router.use(passport.session());

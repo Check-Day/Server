@@ -2,7 +2,6 @@
 
 const express = require("express");
 const session = require("express-session");
-const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const logger = require("./logger/logger");
@@ -15,8 +14,6 @@ const mainRoutes = require("./routes/main");
 const scratchPadRoutes = require("./routes/scratchpad");
 const { dbSync } = require("./data/database/database");
 const { getParameter } = require("./parameter-store/parameters");
-
-dotenv.config();
 
 const app = express();
 

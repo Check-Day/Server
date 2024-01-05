@@ -1,5 +1,5 @@
 /** @format */
-const dotenv = require("dotenv");
+
 const constants = require("../strings");
 const passport = require("passport");
 const {
@@ -12,8 +12,6 @@ const {
   insertUserDataAndScratchPadData,
 } = require("../data/database/databaseOperations");
 const { getParameter } = require("../parameter-store/parameters");
-
-dotenv.config();
 
 var GoogleStrategy = require("passport-google-oauth2").Strategy;
 

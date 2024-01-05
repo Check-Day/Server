@@ -2,15 +2,12 @@
 
 const express = require("express");
 const router = express.Router();
-const dotenv = require("dotenv");
 const loginUserData = require("../data/loggedInUserData");
 const constants = require("../strings");
 const logger = require("../logger/logger");
 const statsdClient = require("../statsd/statsd");
 const { encrypt, decrypt } = require("../middlewares/encryption");
 const { isLoggedIn } = require("../middlewares/checks");
-
-dotenv.config();
 
 router.use(express.urlencoded({ extended: true }));
 

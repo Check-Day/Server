@@ -1,10 +1,7 @@
 /** @format */
 
 const Sequelize = require("sequelize");
-const dotenv = require("dotenv");
 const { getParameter } = require("../../parameter-store/parameters");
-
-dotenv.config();
 
 let sequelize;
 

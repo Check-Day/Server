@@ -2,7 +2,6 @@
 
 const express = require("express");
 const router = express.Router();
-const dotenv = require("dotenv");
 const { isLoggedIn } = require("../middlewares/checks");
 const { decrypt } = require("../middlewares/encryption");
 const logger = require("../logger/logger");
@@ -12,8 +11,6 @@ const {
   getTasksForUser,
   getDataFromScratchPad,
 } = require("../data/database/databaseOperations");
-
-dotenv.config();
 
 router.get("/index", isLoggedIn, async (req, res) => {
   logger.info("GET: Get Tasks For User");

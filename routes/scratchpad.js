@@ -2,7 +2,6 @@
 
 const express = require("express");
 const router = express.Router();
-const dotenv = require("dotenv");
 const {
   isLoggedIn,
   isRequestBody,
@@ -17,8 +16,6 @@ const {
   getDataFromScratchPad,
   updateScratchPad,
 } = require("../data/database/databaseOperations");
-
-dotenv.config();
 
 router.use(express.urlencoded({ extended: true }));
 
