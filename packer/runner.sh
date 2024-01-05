@@ -17,6 +17,13 @@ ALTER USER '$DATABASE_USERNAME'@'$DATABASE_HOST' IDENTIFIED WITH mysql_native_pa
 FLUSH PRIVILEGES;
 SQL
 sudo systemctl start mysql.service
+sudo apt-get update
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+aws configure set aws_access_key_id $ACCESS_KEY
+aws configure set aws_secret_access_key $SECRET_KEY
+aws configure set default.region $AWS_REGION
 sudo cat <<EOF | sudo tee /etc/systemd/system/checkday.service
 [Unit]
 Description=index.js
