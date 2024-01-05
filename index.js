@@ -15,69 +15,81 @@ const mainRoutes = require("./routes/main");
 const scratchPadRoutes = require("./routes/scratchpad");
 const sequelize = require("./data/database/sequelize");
 const database = require("./data/database/database");
+const { getParameter } = require("./parameter-store/parameters");
 
 dotenv.config();
 
 const app = express();
 database.databaseSync();
 
-const port = process.env.APPLICATION_PORT;
+let port, salt, isProduction;
 
-app.use(
-  session({
-    secret: process.env.SALT,
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: process.env.IS_PRODUCTION == "true" ? true : false },
-  })
-);
+getParameter("APPLICATION_PORT").then((applicationPort) => {
+  port = applicationPort;
+  getParameter("SALT").then((appSalt) => {
+    salt = appSalt;
+    getParameter("IS_PRODUCTION").then((isProd) => {
+      isProduction = isProd;
+      app.use(
+        session({
+          secret: salt,
+          resave: false,
+          saveUninitialized: true,
+          cookie: { secure: isProduction == "true" ? true : false },
+        })
+      );
 
-app.use(cookieParser());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+      app.use(cookieParser());
+      app.use(bodyParser.urlencoded({ extended: true }));
+      app.use(bodyParser.json());
 
-sequelize
-  .authenticate()
-  .then(() => {
-    console.log(constants.database_connection_success);
-  })
-  .catch((error) => {
-    console.log(constants.database_connection_failure);
-    throw error;
+      sequelize
+        .authenticate()
+        .then(() => {
+          console.log(constants.database_connection_success);
+        })
+        .catch((error) => {
+          console.log(constants.database_connection_failure);
+          throw error;
+        });
+
+      app.get("/main/check-server-status", (req, res) => {
+        logger.info("GET: Check Main Server");
+        statsdClient.increment("api.calls.get.CHECK_MAIN_SERVER");
+        res
+          .status(200)
+          .json({
+            message: constants.mainServer + " " + constants.successConnection,
+          })
+          .end();
+      });
+
+      app.use("/auth", authRoutes);
+      app.use("/user", userRoutes);
+      app.use("/scratch-pad", scratchPadRoutes);
+      app.use("/task", taskRoutes);
+      app.use("/main", mainRoutes);
+
+      app.all("*", (req, res) => {
+        logger.info("ALL: Unknown Method Called: " + req.url);
+        statsdClient.increment(
+          "api.calls.all.UNKNOWN_METHOD_CALLED_" + req.url
+        );
+        res
+          .status(405)
+          .json({
+            message: constants.methodNotAllowed,
+          })
+          .end();
+      });
+
+      app.listen(port, (error) => {
+        if (!error) {
+          console.log(constants.successServer + port);
+        } else console.log(constants.serverError, error);
+      });
+
+      module.exports = app;
+    });
   });
-
-app.get("/main/check-server-status", (req, res) => {
-  logger.info("GET: Check Main Server");
-  statsdClient.increment("api.calls.get.CHECK_MAIN_SERVER");
-  res
-    .status(200)
-    .json({
-      message: constants.mainServer + " " + constants.successConnection,
-    })
-    .end();
 });
-
-app.use("/auth", authRoutes);
-app.use("/user", userRoutes);
-app.use("/scratch-pad", scratchPadRoutes);
-app.use("/task", taskRoutes);
-app.use("/main", mainRoutes);
-
-app.all("*", (req, res) => {
-  logger.info("ALL: Unknown Method Called: " + req.url);
-  statsdClient.increment("api.calls.all.UNKNOWN_METHOD_CALLED_" + req.url);
-  res
-    .status(405)
-    .json({
-      message: constants.methodNotAllowed,
-    })
-    .end();
-});
-
-app.listen(port, (error) => {
-  if (!error) {
-    console.log(constants.successServer + port);
-  } else console.log(constants.serverError, error);
-});
-
-module.exports = app;
