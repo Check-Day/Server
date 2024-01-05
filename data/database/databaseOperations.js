@@ -2,13 +2,14 @@
 
 const logger = require("../../logger/logger");
 const statsdClient = require("../../statsd/statsd");
-const { UserData, ScratchPadData, TaskData } = require("./database");
+const { dbSync } = require("./database");
 const constants = require("../../strings");
 
 const insertUserDataAndScratchPadData = async (userProfile) => {
   logger.info("TRYING TO INSERTING USER INTO DATABASE");
   statsdClient.increment("api.calls.dataInsertion.DataInsertionCalledToTry");
   try {
+    let { UserData } = await dbSync();
     const findUserByEmail = await UserData.findOne({
       where: { email: userProfile.email },
     });
@@ -21,6 +22,7 @@ const insertUserDataAndScratchPadData = async (userProfile) => {
     }
   } catch (error) {
     try {
+      let { UserData } = await dbSync();
       const newUser = await UserData.create({
         sub: userProfile.sub,
         email: userProfile.email,
@@ -29,6 +31,7 @@ const insertUserDataAndScratchPadData = async (userProfile) => {
         profilePicture: userProfile.picture,
       });
       try {
+        let { ScratchPadData } = await dbSync();
         const newScratchPad = await ScratchPadData.create({
           sub: userProfile.sub,
           email: userProfile.email,
@@ -53,6 +56,7 @@ const insertUserDataAndScratchPadData = async (userProfile) => {
 
 const getDataFromScratchPad = async (userEmail, url) => {
   try {
+    let { ScratchPadData } = await dbSync();
     let scratchPadText = await ScratchPadData.findOne({
       where: {
         email: userEmail,
@@ -85,6 +89,7 @@ const updateScratchPad = async (updatedText, userEmail, dateTime) => {
   try {
     logger.info("UPDATING SCRATCHPAD");
     statsdClient.increment("api.calls.scratchPadUpdate.UpdatingScratchPad");
+    let { ScratchPadData } = await dbSync();
     const scratchPad = await ScratchPadData.findOne({
       where: {
         email: userEmail,
@@ -134,6 +139,7 @@ const addTaskForUser = async (sub, email, text) => {
   try {
     logger.info("ADDING TASK");
     statsdClient.increment("api.calls.taskOperation.AddingTask");
+    let { TaskData } = await dbSync();
     const addTask = await TaskData.create({
       sub: sub,
       email: email,
@@ -166,6 +172,7 @@ const updateTaskForUser = async (serial, newTask) => {
   try {
     logger.info("UPDATING TASK");
     statsdClient.increment("api.calls.taskOperation.UpdatingTask");
+    let { TaskData } = await dbSync();
     const task = await TaskData.findOne({
       where: {
         serial: serial,
@@ -216,6 +223,7 @@ const deleteTaskForUser = async (serial) => {
   try {
     logger.info("DELETING TASK");
     statsdClient.increment("api.calls.taskOperation.DeletingTask");
+    let { TaskData } = await dbSync();
     const task = await TaskData.findOne({
       where: {
         serial: serial,
@@ -260,6 +268,7 @@ const getTasksForUser = async (email, sub) => {
   try {
     logger.info("GETTING TASKS");
     statsdClient.increment("api.calls.taskOperation.GetAllTasksForUser");
+    let { TaskData } = await dbSync();
     const tasks = await TaskData.findAll({
       where: {
         email: email,

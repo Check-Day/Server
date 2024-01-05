@@ -6,7 +6,7 @@ const logger = require("../../logger/logger");
 const statsdClient = require("../../statsd/statsd");
 const constants = require("../../strings");
 
-let UserData, TaskData, ScratchPadData, databaseSync;
+let UserData, TaskData, ScratchPadData;
 
 const dbSync = async () => {
   sequelize = await initDatabase();
@@ -133,6 +133,8 @@ const dbSync = async () => {
       console.log(constants.database_connection_failure);
       throw error;
     });
+
+  return { UserData, TaskData, ScratchPadData };
 };
 
-module.exports = { dbSync, UserData, TaskData, ScratchPadData };
+module.exports = { dbSync };

@@ -23,7 +23,8 @@ dotenv.config();
 router.use(express.urlencoded({ extended: true }));
 
 router.get("/my-scratch-pad", isLoggedIn, async (req, res) => {
-  let userData = JSON.parse(decrypt(req.cookies.userProfile));
+  let decryptedUserProfile = await decrypt(req.cookies.userProfile);
+  let userData = JSON.parse(decryptedUserProfile);
   let returnedMessage = await getDataFromScratchPad(userData.email, req.url);
   res
     .status(returnedMessage.status)
@@ -39,7 +40,8 @@ router.put(
   isRequestBody,
   isRequestBodyForText,
   async (req, res) => {
-    let userData = JSON.parse(decrypt(req.cookies.userProfile));
+    let decryptedUserProfile = await decrypt(req.cookies.userProfile);
+    let userData = JSON.parse(decryptedUserProfile);
     try {
       let updatedScratchPadReturn = await updateScratchPad(
         req.body.text,
@@ -61,7 +63,8 @@ router.put(
 );
 
 router.put("/clear-scratch-pad", isLoggedIn, async (req, res) => {
-  let userData = JSON.parse(decrypt(req.cookies.userProfile));
+  let decryptedUserProfile = await decrypt(req.cookies.userProfile);
+  let userData = JSON.parse(decryptedUserProfile);
   try {
     let updatedScratchPadReturn = await updateScratchPad(
       "",
