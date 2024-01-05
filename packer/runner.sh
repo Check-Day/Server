@@ -31,7 +31,6 @@ Documentation=https://checkday.app/
 Wants=network-online.target
 After=network-online.target cloud-final.service
 [Service]
-EnvironmentFile=/home/ubuntu/.env
 Type=simple
 User=ubuntu
 WorkingDirectory=/home/ubuntu
@@ -41,5 +40,5 @@ Restart=on-failure
 WantedBy=cloud-init.target
 EOF
 sudo systemctl daemon-reload
-# sudo systemctl enable checkday.service
-# sudo systemctl start checkday.service
+sudo systemctl enable checkday.service
+sudo systemctl start checkday.service
