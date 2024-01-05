@@ -13,14 +13,12 @@ const userRoutes = require("./routes/users");
 const taskRoutes = require("./routes/task");
 const mainRoutes = require("./routes/main");
 const scratchPadRoutes = require("./routes/scratchpad");
-const sequelize = require("./data/database/sequelize");
-const database = require("./data/database/database");
+const { dbSync } = require("./data/database/database");
 const { getParameter } = require("./parameter-store/parameters");
 
 dotenv.config();
 
 const app = express();
-database.databaseSync();
 
 let port, salt, isProduction;
 
@@ -28,7 +26,7 @@ getParameter("APPLICATION_PORT").then((applicationPort) => {
   port = applicationPort;
   getParameter("SALT").then((appSalt) => {
     salt = appSalt;
-    getParameter("IS_PRODUCTION").then((isProd) => {
+    getParameter("IS_PRODUCTION").then(async (isProd) => {
       isProduction = isProd;
       app.use(
         session({
@@ -43,15 +41,7 @@ getParameter("APPLICATION_PORT").then((applicationPort) => {
       app.use(bodyParser.urlencoded({ extended: true }));
       app.use(bodyParser.json());
 
-      sequelize
-        .authenticate()
-        .then(() => {
-          console.log(constants.database_connection_success);
-        })
-        .catch((error) => {
-          console.log(constants.database_connection_failure);
-          throw error;
-        });
+      let sequelize = await dbSync();
 
       app.get("/main/check-server-status", (req, res) => {
         logger.info("GET: Check Main Server");
