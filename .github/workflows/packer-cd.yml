@@ -35,30 +35,30 @@ jobs:
         with:
           node-version: "${{ matrix.node-version }}"
           cache: npm
-      - name: Install Packer
-        run: >
-          curl -SL
-          https://releases.hashicorp.com/packer/1.4.2/packer_1.4.2_linux_amd64.zip
-          -o packer_1.4.2_linux_amd64.zip
+      # - name: Install Packer
+      #   run: >
+      #     curl -SL
+      #     https://releases.hashicorp.com/packer/1.4.2/packer_1.4.2_linux_amd64.zip
+      #     -o packer_1.4.2_linux_amd64.zip
 
-          unzip -o packer_1.4.2_linux_amd64.zip -d /tmp
+      #     unzip -o packer_1.4.2_linux_amd64.zip -d /tmp
 
-          sudo mv /tmp/packer /usr/bin/packer
+      #     sudo mv /tmp/packer /usr/bin/packer
 
-          packer --version
-      - name: Create server.zip
-        run: |
-          zip -r server.zip .
-      - name: Initialize Packer Configuration and Format packer file
-        run: |
-          packer init packer/checkday.pkr.hcl
-          packer fmt packer/checkday.pkr.hcl
-      - name: Validate Packer Configuration
-        run: |
-          packer validate packer/checkday.pkr.hcl
-      - name: Build Amazon Machine Image
-        run: |
-          packer build packer/checkday.pkr.hcl
+      #     packer --version
+      # - name: Create server.zip
+      #   run: |
+      #     zip -r server.zip .
+      # - name: Initialize Packer Configuration and Format packer file
+      #   run: |
+      #     packer init packer/checkday.pkr.hcl
+      #     packer fmt packer/checkday.pkr.hcl
+      # - name: Validate Packer Configuration
+      #   run: |
+      #     packer validate packer/checkday.pkr.hcl
+      # - name: Build Amazon Machine Image
+      #   run: |
+      #     packer build packer/checkday.pkr.hcl
       - name: Login to DockerHub
         run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
       - name: Setup AWS CLI
@@ -67,9 +67,12 @@ jobs:
           aws configure set aws_access_key_id $ACCESS_KEY
           aws configure set aws_secret_access_key $SECRET_KEY
           aws configure set default.region $AWS_REGION
-      - name: Setup Docker Client and Build Docker Image to push into ECR
+      - name: Setup Docker Client
         run: |
           aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 467465390813.dkr.ecr.us-east-1.amazonaws.com
-          docker-compose build
-          docker tag checkday:latest 467465390813.dkr.ecr.us-east-1.amazonaws.com/checkday:latest
-          docker push 467465390813.dkr.ecr.us-east-1.amazonaws.com/checkday:latest
+      - name: Build Docker Image
+        run: docker-compose build
+      - name: Tagging Image
+        run: docker tag checkday:latest 467465390813.dkr.ecr.us-east-1.amazonaws.com/checkday:latest
+      - name: Push Docker Image to ECR
+        run: docker push 467465390813.dkr.ecr.us-east-1.amazonaws.com/checkday:latest
