@@ -24,6 +24,8 @@ jobs:
       DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
       AWS_REGION: ${{ secrets.AWS_REGION }}
       SOURCE_AMI: ${{ secrets.SOURCE_AMI }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
     steps:
       - name: Checkout Git Repository
         uses: actions/checkout@v2
@@ -57,3 +59,17 @@ jobs:
       - name: Build Amazon Machine Image
         run: |
           packer build packer/checkday.pkr.hcl
+      - name: Login to DockerHub
+        run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+      - name: Setup AWS CLI
+        run: |
+          sudo apt-get update && sudo apt-get install awscli
+          aws configure set aws_access_key_id $ACCESS_KEY
+          aws configure set aws_secret_access_key $SECRET_KEY
+          aws configure set default.region $AWS_REGION
+      - name: Setup Docker Client and Build Docker Image to push into ECR
+        run: |
+          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 467465390813.dkr.ecr.us-east-1.amazonaws.com
+          docker-compose build
+          docker tag checkday:latest 467465390813.dkr.ecr.us-east-1.amazonaws.com/checkday:latest
+          docker push 467465390813.dkr.ecr.us-east-1.amazonaws.com/checkday:latest
