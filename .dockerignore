@@ -1,0 +1,11 @@
+node_modules
+key
+.DS_Store
+package-lock.json
+references
+secrets
+server.zip
+Dockerfile
+.dockerignore
+.github
+.gitignore
