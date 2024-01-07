@@ -12,7 +12,7 @@ services:
       - AWS_ACCESS_KEY_ID=${ACCESS_KEY}
       - AWS_SECRET_ACCESS_KEY=${SECRET_KEY}
       - AWS_DEFAULT_REGION=${AWS_REGION}
-      - DATABASE_HOST=database
+      - DATABASE_HOST=${DATABASE_HOST}
     depends_on:
       database:
         condition: service_healthy
