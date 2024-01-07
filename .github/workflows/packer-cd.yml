@@ -73,6 +73,6 @@ jobs:
       - name: Build Docker Image
         run: docker-compose build
       - name: Tagging Image
-        run: docker tag checkday:latest 467465390813.dkr.ecr.us-east-1.amazonaws.com/checkday:latest
+        run: docker tag 467465390813.dkr.ecr.us-east-1.amazonaws.com/checkday:latest 467465390813.dkr.ecr.us-east-1.amazonaws.com/checkday:latest
       - name: Push Docker Image to ECR
         run: docker push 467465390813.dkr.ecr.us-east-1.amazonaws.com/checkday:latest
