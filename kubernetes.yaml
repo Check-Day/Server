@@ -1,0 +1,26 @@
+# @format
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: checkday-app-deployment
+  labels:
+    app: checkday
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: checkday-app-tag
+  template:
+    metadata:
+      name: checkday-app
+      labels:
+        app: checkday-app-tag
+    spec:
+      imagePullSecrets:
+        - name: checkday-ecr-secret
+      containers:
+        - name: checkday-app
+          image: 467465390813.dkr.ecr.us-east-1.amazonaws.com/checkday:checkday-image
+          ports:
+            - containerPort: 5969

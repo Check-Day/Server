@@ -28,6 +28,3 @@ COPY . .
 COPY aws-config.sh /usr/local/bin/aws-config.sh
 RUN chmod +x /app/time/wait.sh
 RUN chmod +x /usr/local/bin/aws-config.sh
-
-# ENTRYPOINT [ "/usr/local/bin/aws-config.sh" ]
-# CMD [ "npm", "run", "start"]
