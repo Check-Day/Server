@@ -18,8 +18,6 @@ spec:
     spec:
       containers:
         - name: checkday-container
-          image: 467465390813.dkr.ecr.us-east-1.amazonaws.com/checkday:checkday-image
-          ports:
-            - containerPort: 5969
+          image: saitejsunkara/checkday:checkday
       imagePullSecrets:
-        - name: checkday-ecr-secret
+        - name: checkday-docker-hub-secret
