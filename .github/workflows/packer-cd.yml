@@ -77,6 +77,6 @@ jobs:
       - name: Push Docker Image to ECR
         run: docker push 467465390813.dkr.ecr.us-east-1.amazonaws.com/checkday:checkday-image
       - name: Tagging Image
-        run: docker tag 467465390813.dkr.ecr.us-east-1.amazonaws.com/checkday:checkday saitejsunkara/checkday:checkday
+        run: docker tag 467465390813.dkr.ecr.us-east-1.amazonaws.com/checkday saitejsunkara/checkday:checkday
       - name: Push Docker Image to Docker Hub
         run: docker push saitejsunkara/checkday:checkday
