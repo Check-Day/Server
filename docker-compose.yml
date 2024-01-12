@@ -4,12 +4,13 @@ version: "3.8"
 
 services:
   checkday:
-    build: .
+    build:
+      context: .
+      args:
+        AWS_ACCESS_KEY_ID: ${ACCESS_KEY}
+        AWS_SECRET_ACCESS_KEY: ${SECRET_KEY}
+        AWS_DEFAULT_REGION: ${AWS_REGION}
     image: 467465390813.dkr.ecr.us-east-1.amazonaws.com/checkday:latest
     ports:
       - "5969:5969"
-    environment:
-      - AWS_ACCESS_KEY_ID=${ACCESS_KEY}
-      - AWS_SECRET_ACCESS_KEY=${SECRET_KEY}
-      - AWS_DEFAULT_REGION=${AWS_REGION}
     command: ["npm", "run", "start"]
